@@ -1,4 +1,4 @@
-const noble = require('noble');
+const noble = require('noble-mac');
 const XiaomiServiceReader = require('./index');
 
 noble.on('stateChange', function(state) {

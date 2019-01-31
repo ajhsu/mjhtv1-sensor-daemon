@@ -13,6 +13,6 @@
   "author": "LynxyssCZ@gmail.com",
   "license": "ISC",
   "devDependencies": {
-    "noble": "^1.9.1"
+    "noble-mac": "https://github.com/Timeular/noble-mac.git"
   }
 }
