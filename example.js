@@ -1,7 +1,7 @@
 const noble = require('noble-mac');
 const XiaomiServiceReader = require('./index');
 
-noble.on('stateChange', function(state) {
+noble.on('stateChange', function (state) {
   if (state === 'poweredOn') {
     noble.startScanning([], true);
   } else {
@@ -9,23 +9,22 @@ noble.on('stateChange', function(state) {
   }
 });
 
-noble.on('discover', function(peripheral) {
+noble.on('discover', function (peripheral) {
   const { id, address, addressType, connectable, rssi, advertisement } = peripheral;
   const { localName, serviceData, serviceUuids } = advertisement;
-  let xiaomiData = null;
-  for (let i in serviceData) {
-    if (serviceData[i].uuid.toString('hex') === 'fe95') {
-      xiaomiData = serviceData[i].data;
+
+  if (serviceData) {
+    const mjhtv1Sensor = serviceData
+      .filter(service => service.uuid.toString('hex') === 'fe95')
+      .shift();
+    if (mjhtv1Sensor) {
+      console.log({
+        id,
+        rssi,
+        data: JSON.stringify(
+          XiaomiServiceReader.readServiceData(mjhtv1Sensor.data)
+        )
+      });
     }
   }
-
-  if (!xiaomiData) return;
-
-  console.log({
-    id,
-    address,
-    localName,
-    rssi,
-    data: JSON.stringify(XiaomiServiceReader.readServiceData(xiaomiData))
-  });
 });
